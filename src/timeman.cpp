@@ -37,8 +37,9 @@ struct TimeConstants {
     }
 };
 
-inline TimePoint TimeManagement::optimum() const { return optimumTime; }
-inline TimePoint TimeManagement::maximum() const { return maximumTime; }
+// Remove 'inline' keyword to ensure proper linkage
+TimePoint TimeManagement::optimum() const { return optimumTime; }
+TimePoint TimeManagement::maximum() const { return maximumTime; }
 
 void TimeManagement::clear() {
     availableNodes = -1;
@@ -75,7 +76,6 @@ void TimeManagement::init(Search::LimitsType& limits,
     }
 
     const TimePoint scaledTime = limits.time[us] / scaleFactor;
-    const TimePoint scaledInc = limits.inc[us] / scaleFactor;
 
     // Improved move horizon calculation
     int centiMTG = limits.movestogo ? 
