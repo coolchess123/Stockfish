@@ -121,19 +121,9 @@ void TimeManagement::init(Search::LimitsType& limits,
     maximumTime = TimePoint(std::min(0.825179 * limits.time[us] - moveOverhead, 
                                     maxScale * optimumTime)) - 10;
 
-    // Dynamic time adjustments based on game phase
-    if (ply < 20) {
-        // More aggressive opening play
-        optimumTime = optimumTime * (2 + ply) / 4;  // Gradually increase time usage
-    }
-    else if (ply > 40 && timeLeft > limits.time[us] / 2) {
-        // Save time for endgame if we have plenty
-        optimumTime = optimumTime * 4 / 5;
-    }
-
     // Hard cap on maximum time usage
     const TimePoint maxCap = TimePoint(0.20 * limits.time[us]);
-    maximumTime = std::min(maximumTime, maxCap);
+    maximumTime = std::max(TimePoint(1), std::min(maximumTime, maxCap));
 
     // Ponder time adjustment
     if (options["Ponder"])
